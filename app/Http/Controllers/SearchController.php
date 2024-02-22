@@ -31,9 +31,9 @@ class SearchController extends Controller
         return response()->json(['message' => 'Search endpoint', 'data' => $yourSearchResults]);
     }
 
-    public function searchById($id): \Illuminate\Http\JsonResponse {
-        $response = $this->searchService->getById($id);
-        return $response->json($response);
+    public function searchById(Request $request): \Illuminate\Http\JsonResponse {
+        $response = $this->searchService->getById($request->route('id'));
+        return response()->json(['message' => 'Search endpoint', 'data'=>$response]);
     }
 
     public function addToFavorites($id, $alias, $userId): void{

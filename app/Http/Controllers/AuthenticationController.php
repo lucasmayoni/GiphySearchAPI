@@ -15,8 +15,8 @@ class AuthenticationController extends Controller
     public function login(): \Illuminate\Http\JsonResponse
     {
         if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){
-            $user = User::find(Auth::user()->id);
-            $user_token['token'] = $user->createToken('appToken')->accessToken;
+            $user = Auth::user();
+            $user_token['token'] = $user->createToken('GiphyAPI')->accessToken;
             return response()->json(['success' => true, 'token' => $user_token,
                 'user' => $user], 200);
         }
@@ -39,7 +39,7 @@ class AuthenticationController extends Controller
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
-        $success['token'] =  $user->createToken('MyApp')->accessToken;
+        $success['token'] =  $user->createToken('GiphyAPI')->accessToken;
         $success['name'] =  $user->name;
         return response()->json(['success'=>$success], 200);
     }

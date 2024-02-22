@@ -2,10 +2,13 @@
 
 namespace App\Services;
 
-use League\Uri\Http;
+use Illuminate\Support\Facades\Http;
+
 
 class SearchApiService implements SearchServiceInterface
 {
+
+    public $base_url = 'https://api.giphy.com/v1/gifs/';
 
     /*
      * https://api.giphy.com/v1/gifs/search?
@@ -16,20 +19,25 @@ class SearchApiService implements SearchServiceInterface
      * */
     public function search($text, $limit, $offset)
     {
-        // TODO: Implement search() method.
-        $response = \Illuminate\Support\Facades\Http::get(
-            'https://api.giphy.com/v1/gifs/search',
-            ['api_key'=>"vnLdbCMTr7NQC621XJCJeMRcVNPCRYED",
+        $response = Http::get($this->base_url.'search',
+            [   "api_key"=>"vnLdbCMTr7NQC621XJCJeMRcVNPCRYED",
                 "q"=>$text,
                 "limit" => $limit,
-                "offset"=>$offset]
+                "offset"=>$offset
+            ]
         );
+
         return $response->json();
     }
 
     public function getById($id)
     {
-        // TODO: Implement getById() method.
+        $response = Http::get($this->base_url.$id,
+            [   "api_key"=>"vnLdbCMTr7NQC621XJCJeMRcVNPCRYED"
+
+            ]
+        );
+        return $response->json();
     }
 
     public function addToFavorites($id, $alias, $userId)
