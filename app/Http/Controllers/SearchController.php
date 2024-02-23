@@ -2,42 +2,108 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\AuditLogRepository;
+use App\Repositories\AuditLogRepositoryInterface;
+use App\Repositories\UserFavoriteRepository;
+use App\Repositories\UserFavoriteRepositoryInterface;
 use App\Services\SearchServiceInterface;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+
 
 class SearchController extends Controller
 {
-    protected $searchService;
-    public function __construct(SearchServiceInterface $searchService){
-        $this->searchService = $searchService;
-    }
-    public function index(): \Illuminate\Http\JsonResponse
+    protected SearchServiceInterface $searchService;
+    protected AuditLogRepository $auditLogRepository;
+
+    protected UserFavoriteRepository $userFavoriteRepository;
+
+    /**
+     * @param SearchServiceInterface $searchService
+     * @param AuditLogRepositoryInterface $auditLogRepository
+     * @param UserFavoriteRepositoryInterface $userFavoriteRepository
+     */
+    public function __construct(
+        SearchServiceInterface $searchService,
+        AuditLogRepositoryInterface $auditLogRepository,
+        UserFavoriteRepositoryInterface $userFavoriteRepository
+    )
     {
-        $prueba = array(
-            "name" => "TEST",
-            "age" => 20
-        );
-        return response()->json($prueba);
+        $this->searchService = $searchService;
+        $this->auditLogRepository = $auditLogRepository;
+        $this->userFavoriteRepository = $userFavoriteRepository;
     }
 
-    public function search(Request $request): \Illuminate\Http\JsonResponse
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function search(Request $request): JsonResponse
     {
         $text = $request->input('text');
-        $limit = $request->input('limit', 10); // Default limit is 10
+        $limit = $request->input('limit', 10);
         $offset = $request->input('offset', 0);
 
-        $yourSearchResults = $this->searchService->search($text, $limit, $offset);
+        $results = $this->searchService->search($text, $limit, $offset);
 
-        return response()->json(['message' => 'Search endpoint', 'data' => $yourSearchResults]);
+        $this->auditLogRepository->createLog($this->auditLogBuilder($request, $results));
+        return response()->json($results['data'],  $results['response_code']);
     }
 
-    public function searchById(Request $request): \Illuminate\Http\JsonResponse {
-        $response = $this->searchService->getById($request->route('id'));
-        return response()->json(['message' => 'Search endpoint', 'data'=>$response]);
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function searchById(Request $request): JsonResponse {
+        $results = $this->searchService->getById($request->route('id'));
+        $this->auditLogRepository->createLog($this->auditLogBuilder($request, $results));
+        return response()->json($results['data'],  $results['response_code']);
     }
 
-    public function addToFavorites($id, $alias, $userId): void{
-        $response = $this->searchService->addToFavorites($id, $alias, $userId);
-        // return $response->json($response);
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function addToFavorites(Request $request): JsonResponse{
+        $id = $request->input('id');
+        $alias = $request->input('alias');
+        try {
+            $data = [
+                'user_id' => $request->user()->id,
+                'alias' => $alias,
+                'gif_id' => $id
+            ];
+            $this->userFavoriteRepository->addFavorite($data);
+            $results = [
+                'success' => true,
+                'data' => 'Favorite Added Successfully ',
+                'response_code' => 201
+            ];
+        }catch (\Exception $ex) {
+            $results = [
+                'success' => false,
+                'data' => $ex->getMessage(),
+                'response_code' => $ex->getCode()
+            ];
+        }
+
+        $this->auditLogRepository->createLog($this->auditLogBuilder($request, $results));
+        return response()->json(['success'=>$results['success']], $results['response_code']);
+    }
+
+    /**
+     * @param Request $request
+     * @param array $results
+     * @return array
+     */
+    private function auditLogBuilder(Request $request, array $results):array {
+        return [
+            'user_id'=>$request->user()->id,
+            'service_url' => $request->fullUrl(),
+            'request_body' => json_encode($request->query()),
+            'response_body'=> json_encode($results['data']),
+            'response_code' => $results['response_code'],
+            'request_source_ip' => $request->ip()
+        ];
     }
 }
