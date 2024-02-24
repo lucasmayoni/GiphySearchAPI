@@ -25,7 +25,7 @@ Generate env file
   $ mv .env.example .env
 ```
 
-Install using Sail (docker wrapper)
+Install using Sail (docker wrapper). This following commands allows to install dependencies without having composer installed
 
 
 ```bash
@@ -33,10 +33,10 @@ Install using Sail (docker wrapper)
   $ ./configure_composer.sh
 ```
 
-Start the server
+Start the server (and attach as daemon)
 
 ```bash
-  $ ./vendor/bin/sail up
+  $ ./vendor/bin/sail up -d
 ```
 
 Run the migrations
@@ -56,6 +56,11 @@ Install Passport (to ensure Authentication)
   $ ./vendor/bin/sail php artisan passport:install
 ```
 
+To stop the server
+```bash
+$ ./vendor/bin/sail stop
+```
+
 ## Running Tests
 
 To run tests, run the following command
@@ -63,6 +68,7 @@ To run tests, run the following command
 ```bash
   $ ./vendor/bin/sail php artisan test
 ```
+
 
 ## Using with Postman
 
