@@ -39,6 +39,11 @@ Run the migrations
   ./vendor/bin/sail php artisan migrate
 ```
 
+Install Passport (to ensure Authentication)
+```bash
+  ./vendor/bin/sail php artisan passport:install
+```
+
 ## Running Tests
 
 To run tests, run the following command
