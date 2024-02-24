@@ -3,8 +3,7 @@
 
 This is a REST api that interacts with GiphyPublicAPI (with a given key) and allows you to search gifs with some variables and also get the information of a particular gif (using the id)
 
-It also allow you to add your favorite gifs to a databse in order to get information later. You'll only need the gifId and provide an 'alias' to identify it later
-
+It also allows you to add your favorite gifs to a database in order to get information later. You'll only need the gifId and provide an 'alias' to identify it later
 
 
 ## Run Locally
@@ -12,49 +11,49 @@ It also allow you to add your favorite gifs to a databse in order to get informa
 Clone the project
 
 ```bash
-  git clone https://link-to-project
+  $ git clone https://github.com/lucasmayoni/GiphySearchAPI.git
 ```
 
 Go to the project directory
 
 ```bash
-  cd my-project
+  $ cd GiphySearchAPI
 ```
 
 Generate env file
 ```bash
-mv .env.example .env
+  $ mv .env.example .env
 ```
 
-Install using docker
-
+Install using Sail (docker wrapper)
 
 
 ```bash
-  docker build (install with composer)
+  $ chmod +x configure_composer.sh
+  $ ./configure_composer.sh
 ```
 
 Start the server
 
 ```bash
-  ./vendor/bin/sail up
+  $ ./vendor/bin/sail up
 ```
 
 Run the migrations
 
 ```bash
-  ./vendor/bin/sail php artisan migrate
+  $ ./vendor/bin/sail php artisan migrate
 ```
 
 Generate project KEY
 
 ```bash
-  ./vendor/bin/sail php artisan key:generate
+  $ ./vendor/bin/sail php artisan key:generate
 ```
 
 Install Passport (to ensure Authentication)
 ```bash
-  ./vendor/bin/sail php artisan passport:install
+  $ ./vendor/bin/sail php artisan passport:install
 ```
 
 ## Running Tests
@@ -62,7 +61,7 @@ Install Passport (to ensure Authentication)
 To run tests, run the following command
 
 ```bash
-  ./vendor/bin/sail php artisan test
+  $ ./vendor/bin/sail php artisan test
 ```
 
 ## Using with Postman
