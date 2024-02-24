@@ -2,38 +2,85 @@
 
 namespace App\Services;
 
-use League\Uri\Http;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Http;
+
 
 class SearchApiService implements SearchServiceInterface
 {
 
-    /*
-     * https://api.giphy.com/v1/gifs/search?
-     * api_key=vnLdbCMTr7NQC621XJCJeMRcVNPCRYED&
-     * q=mickey&
-     * limit=25&
-     * offset=0&rating=g&lang=en&bundle=messaging_non_clips
-     * */
-    public function search($text, $limit, $offset)
+    protected $base_url;
+    protected $api_key;
+
+    /**
+     * @param string $base_url
+     */
+    public function __construct(string $base_url, string $api_key)
     {
-        // TODO: Implement search() method.
-        $response = \Illuminate\Support\Facades\Http::get(
-            'https://api.giphy.com/v1/gifs/search',
-            ['api_key'=>"vnLdbCMTr7NQC621XJCJeMRcVNPCRYED",
-                "q"=>$text,
-                "limit" => $limit,
-                "offset"=>$offset]
-        );
-        return $response->json();
+        $this->base_url = $base_url;
+        $this->api_key  = $api_key;
     }
 
-    public function getById($id)
+    /**
+     * @param $text
+     * @param $limit
+     * @param $offset
+     * @return array
+     */
+    public function search($text, $limit, $offset): array
     {
-        // TODO: Implement getById() method.
+        try {
+            $queryResponse = Http::get($this->base_url . 'search',
+                [
+                    "api_key" => $this->api_key,
+                    "q" => $text,
+                    "limit" => $limit,
+                    "offset" => $offset
+                ]
+            );
+            $response = [
+                'data' => $queryResponse->json(),
+                'success' => true,
+                'response_code' => $queryResponse->status()
+            ];
+        } catch (\Exception $ex) {
+            $response = [
+                'response_code' => 404,
+                'data' => [],
+                'success'=>false,
+                'errors' => $ex->getMessage()
+            ];
+        }
+
+        return $response;
     }
 
-    public function addToFavorites($id, $alias, $userId)
+    /**
+     * @param $id
+     * @return array
+     */
+    public function getById($id): array
     {
-        // TODO: Implement addToFavorites() method.
+
+        try {
+            $queryResponse = Http::get($this->base_url.$id,
+                [
+                    "api_key"=>$this->api_key
+                ]
+            );
+            $response = [
+                'data' => $queryResponse->json(),
+                'success' => true,
+                'response_code' => $queryResponse->status()
+            ];
+        } catch (\Exception $ex) {
+            $response = [
+                'response_code' => 404,
+                'data' => [],
+                'success'=>false,
+                'errors' => $ex->getMessage()
+            ];
+        }
+        return $response;
     }
 }

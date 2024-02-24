@@ -1,0 +1,361 @@
+{
+	"info": {
+		"_postman_id": "8577a119-4d4d-4ddd-ab74-b0114f062265",
+		"name": "Giphy Search API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27785067"
+	},
+	"item": [
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "{{registerName}}",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "{{registerEmail}}",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "{{password}}",
+							"type": "text"
+						},
+						{
+							"key": "c_password",
+							"value": "{{password}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://{{api_url}}/api/register",
+					"protocol": "http",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"api",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"pm.collectionVariables.set(\"accessToken\", jsonData.token.token);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{Bearer Token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "email",
+							"value": "{{registerEmail}}",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "{{password}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://{{api_url}}/api/login",
+					"protocol": "http",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search GIfs",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "http://{{api_url}}/api/search?text=test&limit=10&offset=10",
+					"protocol": "http",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"api",
+						"search"
+					],
+					"query": [
+						{
+							"key": "text",
+							"value": "test"
+						},
+						{
+							"key": "limit",
+							"value": "10"
+						},
+						{
+							"key": "offset",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get GIF info By Id",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/api/search/3PAGDqG9ENQF8QHZKt",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"search",
+						"3PAGDqG9ENQF8QHZKt"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Favorite",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "id",
+							"value": "3PAGDqG9ENQF8QHZKt",
+							"type": "text"
+						},
+						{
+							"key": "alias",
+							"value": "Mickey Gif222",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://{{api_url}}/api/fav",
+					"protocol": "http",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"api",
+						"fav"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Generate Token",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "response_type",
+						"value": "token",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "otroUser3",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "email",
+							"value": "otro.user3@mail.com",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "password",
+							"value": "123456",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "c_password",
+							"value": "123456",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "client_id",
+							"value": "4",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "89ZJfphAlIHhlhvmzluSIxZS5H2oBcFV5tjThwUF",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://{{api_url}}/oauth/token",
+					"protocol": "http",
+					"host": [
+						"{{api_url}}"
+					],
+					"path": [
+						"oauth",
+						"token"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer"
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "api_url",
+			"value": "localhost"
+		},
+		{
+			"key": "Bearer Token",
+			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiNTI0YjQ1NzdjZTBlMGQ3OTk4NTIyNTMxZmJkMGY4YTA4Mzg5Y2EwNjJjZmY4NzQ1MTZlOTQ2NDFiMWJjYTQ2Y2UyMWI1YmY2ODNkOWY3YzMiLCJpYXQiOjE3MDg2NDAzNDEuODU5MDQsIm5iZiI6MTcwODY0MDM0MS44NTkwNDIsImV4cCI6MTcyNDM2NTE0MS44NTI2OTgsInN1YiI6IjYiLCJzY29wZXMiOltdfQ.MeFiMXl2hRmYbKsPn9ddTJm9q0NRuRujH2I0XlWEvx9tglxrBx9lgBbx-1yWXIqgUm2V1X7114lr6V3hS4yMggfzq9ZqKa6qqJpKOFo-KSmkRVdaqKYt2VjX_hNel-MDHxFRUfHlPSnlG71pZzXh234i1R9s1mgDKLgV2HEKzVuy8h0wk19Vww6WgiCGzDlU_N3bg0royDdwTWwA8NrSsw2mKkA3Xmuw8Q8JCkDFK4q6tmmBcIBvLqHyTwMNC5M1PvLgTovhdsuNbZSFtDd8czN_0M0p2jwBuSd3pVDhdWI7Yw8nSofAZCOiqBxMPF4cvgGzaIi44FZOUapCNWit4XSc7mpJqqw-QNAb9rUoEeCc60rR_WPKKc_bU2hJKzSf2DRZ3oTTzh-MDQfPuhRMIJ0dhGo7EXiWH25AKmUYmBOuF5jQkK1kp0jM4cPLN0eaeQS58xvhiLlx6oH0eXeIX6QgSdSiEcq1n6ntCE3s4tI-TuMUYXgd8TCzedF_WTdPueKkU7ZGxRIl-UH6hUatIE7pTy0l3xvhUMrsplR10jhwEeoJQh-1Ak6hdQT82Y-IiOSyqqTFiaNgfoeMuMlGFoxGzB8APEmly30bgLlIM34lOmj4ViTX-9Cey-hJuWbxs8J1kd3zk9DzYzOXzsFJ13YTpEDrhYX2ltPZobI3AWg"
+		},
+		{
+			"key": "password",
+			"value": "123456"
+		},
+		{
+			"key": "registerName",
+			"value": "Cosme Fulanito"
+		},
+		{
+			"key": "registerEmail",
+			"value": "cosme.fulanito@mail.com"
+		},
+		{
+			"key": "accessToken",
+			"value": ""
+		}
+	]
+}
