@@ -19,7 +19,7 @@ Route::post('register', [AuthenticationController::class, 'register']);
 Route::group(['middleware' => 'auth:api'], function(){
     Route::get('search', [SearchController::class, 'search']);
     Route::get('search/{id}', [SearchController::class, 'searchById']);
-    Route::get('fav', [SearchController::class, 'addToFavorites']);
+    Route::post('fav', [SearchController::class, 'addToFavorites']);
 });
 
 

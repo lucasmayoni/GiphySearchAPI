@@ -9,7 +9,17 @@ use Illuminate\Support\Facades\Http;
 class SearchApiService implements SearchServiceInterface
 {
 
-    public string $base_url = 'https://api.giphy.com/v1/gifs/';
+    protected $base_url;
+    protected $api_key;
+
+    /**
+     * @param string $base_url
+     */
+    public function __construct(string $base_url, string $api_key)
+    {
+        $this->base_url = $base_url;
+        $this->api_key  = $api_key;
+    }
 
     /**
      * @param $text
@@ -22,7 +32,7 @@ class SearchApiService implements SearchServiceInterface
         try {
             $queryResponse = Http::get($this->base_url . 'search',
                 [
-                    "api_key" => "vnLdbCMTr7NQC621XJCJeMRcVNPCRYED",
+                    "api_key" => $this->api_key,
                     "q" => $text,
                     "limit" => $limit,
                     "offset" => $offset
@@ -35,7 +45,7 @@ class SearchApiService implements SearchServiceInterface
             ];
         } catch (\Exception $ex) {
             $response = [
-                'response_code' => $ex->getCode(),
+                'response_code' => 404,
                 'data' => [],
                 'success'=>false,
                 'errors' => $ex->getMessage()
@@ -55,7 +65,7 @@ class SearchApiService implements SearchServiceInterface
         try {
             $queryResponse = Http::get($this->base_url.$id,
                 [
-                    "api_key"=>"vnLdbCMTr7NQC621XJCJeMRcVNPCRYED"
+                    "api_key"=>$this->api_key
                 ]
             );
             $response = [
@@ -65,7 +75,7 @@ class SearchApiService implements SearchServiceInterface
             ];
         } catch (\Exception $ex) {
             $response = [
-                'response_code' => $ex->getCode(),
+                'response_code' => 404,
                 'data' => [],
                 'success'=>false,
                 'errors' => $ex->getMessage()

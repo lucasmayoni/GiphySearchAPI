@@ -7,12 +7,19 @@ use App\Models\UserFavorites;
 class UserFavoriteRepository implements UserFavoriteRepositoryInterface
 {
 
+    protected $model;
+    public function __construct(UserFavorites $userFavorites)
+    {
+        $this->model= $userFavorites;
+    }
+
+
     /**
      * @param array $data
-     * @return void
+     * @return mixed
      */
-    public function addFavorite(array $data): void
+    public function addFavorite(array $data)
     {
-        UserFavorites::create($data);
+        return UserFavorites::create($data);
     }
 }

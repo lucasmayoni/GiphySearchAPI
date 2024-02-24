@@ -185,4 +185,9 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
+    /*
+     * Config Giphy API
+     * */
+    'base_url' => env('SEARCH_API_BASE_URL', 'https://api.giphy.com/v1/gifs/'),
+    'api_key' => env('SEARCH_API_DEVELOPER_KEY', '')
 ];
