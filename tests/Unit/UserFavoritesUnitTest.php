@@ -4,10 +4,13 @@ namespace Tests\Unit;
 
 use App\Models\UserFavorites;
 use App\Repositories\UserFavoriteRepository;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class UserFavoritesUnitTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function testUserFavoriteIsCreated()
     {
         $data = [

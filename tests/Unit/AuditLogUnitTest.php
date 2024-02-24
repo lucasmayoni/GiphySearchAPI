@@ -4,10 +4,14 @@ namespace Tests\Unit;
 
 use App\Models\AuditLog;
 use App\Repositories\AuditLogRepository;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class AuditLogUnitTest extends TestCase
 {
+
+    use RefreshDatabase;
+
     public function testCreateAuditLogRecord() {
 
         $data = [
