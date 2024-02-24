@@ -65,3 +65,10 @@ To run tests, run the following command
   ./vendor/bin/sail php artisan test
 ```
 
+## Using with Postman
+
+You can download and import this [Postman Collection]({{file name='doc/Giphy_Search_API.postman_collection.json'}}) 
+
+## Documentation
+
+Related documentation and schemas [API Documentation]({{file name='doc/API_Documentation.pdf}})
