@@ -21,7 +21,14 @@ Go to the project directory
   cd my-project
 ```
 
+Generate env file
+```bash
+mv .env.example .env
+```
+
 Install using docker
+
+
 
 ```bash
   docker build (install with composer)
@@ -30,13 +37,19 @@ Install using docker
 Start the server
 
 ```bash
-  docker compose up
+  ./vendor/bin/sail up
 ```
 
 Run the migrations
 
 ```bash
   ./vendor/bin/sail php artisan migrate
+```
+
+Generate project KEY
+
+```bash
+  ./vendor/bin/sail php artisan key:generate
 ```
 
 Install Passport (to ensure Authentication)
