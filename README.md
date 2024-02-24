@@ -67,8 +67,8 @@ To run tests, run the following command
 
 ## Using with Postman
 
-You can download and import this [Postman Collection](doc/Giphy_Search_API.postman_collection.json') 
+You can download and import this [Postman Collection](https://github.com/lucasmayoni/GiphySearchAPI/blob/master/doc/Giphy_Search_API.postman_collection.json) 
 
 ## Documentation
 
-Related documentation and schemas [API Documentation](doc/API_Documentation.pdf)
+Related documentation and schemas [API Documentation](https://github.com/lucasmayoni/GiphySearchAPI/blob/master/doc/API_Documentation.pdf)
