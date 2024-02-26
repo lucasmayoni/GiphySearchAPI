@@ -81,6 +81,6 @@ class SearchApiControllerTest extends TestCase
             'id' => $this->gifDemoId
         ];
         $response = $this->post('/api/fav',$data,$this->headers($this->user));
-        $response->assertStatus(403);
+        $response->assertStatus(422);
     }
 }

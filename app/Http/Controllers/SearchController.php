@@ -46,7 +46,7 @@ class SearchController extends Controller
             "text" => "required",
         ]);
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 403);
+            return response()->json($validator->errors(), 422);
         }
         $text = $request->input('text');
         $limit = $request->input('limit', 10);
@@ -68,7 +68,7 @@ class SearchController extends Controller
             "id" => "required",
         ]);
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 403);
+            return response()->json($validator->errors(), 422);
         }
         $results = $this->searchService->getById($request->route('id'));
         $this->auditLogRepository->createLog($this->auditLogBuilder($request, $results));
@@ -85,7 +85,7 @@ class SearchController extends Controller
             "alias" => "required"
         ]);
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 403);
+            return response()->json($validator->errors(), 422);
         }
         $id = $request->input('id');
         $alias = $request->input('alias');
