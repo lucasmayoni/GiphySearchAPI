@@ -9,6 +9,7 @@ use App\Repositories\UserFavoriteRepositoryInterface;
 use App\Services\SearchServiceInterface;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 
 class SearchController extends Controller
@@ -40,6 +41,13 @@ class SearchController extends Controller
      */
     public function search(Request $request): JsonResponse
     {
+
+        $validator = Validator::make($request->all(), [
+            "text" => "required",
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 403);
+        }
         $text = $request->input('text');
         $limit = $request->input('limit', 10);
         $offset = $request->input('offset', 0);
@@ -55,6 +63,13 @@ class SearchController extends Controller
      * @return JsonResponse
      */
     public function searchById(Request $request): JsonResponse {
+        $request->merge(['id'=> $request->route('id')]);
+        $validator = Validator::make($request->all(), [
+            "id" => "required",
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 403);
+        }
         $results = $this->searchService->getById($request->route('id'));
         $this->auditLogRepository->createLog($this->auditLogBuilder($request, $results));
         return response()->json($results['data'],  $results['response_code']);
@@ -65,6 +80,13 @@ class SearchController extends Controller
      * @return JsonResponse
      */
     public function addToFavorites(Request $request): JsonResponse{
+        $validator = Validator::make($request->all(), [
+            "id" => "required",
+            "alias" => "required"
+        ]);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 403);
+        }
         $id = $request->input('id');
         $alias = $request->input('alias');
         $validated = $request->validate([
