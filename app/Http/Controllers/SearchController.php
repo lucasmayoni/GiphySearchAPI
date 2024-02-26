@@ -67,6 +67,10 @@ class SearchController extends Controller
     public function addToFavorites(Request $request): JsonResponse{
         $id = $request->input('id');
         $alias = $request->input('alias');
+        $validated = $request->validate([
+            'id' => 'required',
+            'alias' => 'required'
+        ]);
         try {
             $data = [
                 'user_id' => $request->user()->id,

@@ -12,11 +12,12 @@ class AuthenticationController extends Controller
     {
         $this->middleware('auth:api', ['except' => ['login','register']]);
     }
-    public function login(): \Illuminate\Http\JsonResponse
+    public function login(Request $request): \Illuminate\Http\JsonResponse
     {
         if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){
             $user = Auth::user();
-            $user_token['token'] = $user->createToken('GiphyAPI')->accessToken;
+            //$user_token['token'] = $user->createToken('GiphyAPI')->accessToken;
+            $user_token['token'] = $request->user()->createToken('GiphyAPI')->accessToken;
             return response()->json(['success' => true, 'token' => $user_token,
                 'user' => $user], 200);
         }
