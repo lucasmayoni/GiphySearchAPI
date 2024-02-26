@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SearchRequest;
 use App\Repositories\AuditLogRepository;
 use App\Repositories\AuditLogRepositoryInterface;
 use App\Repositories\UserFavoriteRepository;
@@ -36,18 +37,12 @@ class SearchController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param SearchRequest $request
      * @return JsonResponse
      */
-    public function search(Request $request): JsonResponse
+    public function search(SearchRequest $request): JsonResponse
     {
 
-        $validator = Validator::make($request->all(), [
-            "text" => "required",
-        ]);
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 403);
-        }
         $text = $request->input('text');
         $limit = $request->input('limit', 10);
         $offset = $request->input('offset', 0);
